@@ -1,0 +1,80 @@
+{% extends 'services/base.html' %}
+<!-- services/templates/services/service_list.html -->
+
+<h1>Service Records</h1>
+
+<!-- Navigation links to your CreateViews -->
+<div class="actions">
+    <a href="{% url 'services:service-create' %}">Add New Service</a> |
+    <a href="{% url 'services:wheel-create' %}">Add New Wheel Service</a> |
+    <a href="{% url 'services:part-create' %}">Add New Part Sale</a>
+    {% for service in services %}
+    {{ service.name }}
+    <a href="{% url 'services:service-update' service.pk %}">Edit</a>
+    <a href="{% url 'services:service-delete' service.pk %}">Delete</a>
+    {% endfor %}
+</div>
+
+<hr>
+
+<!-- Your existing code to display the list of records goes below -->
+<ul>
+    {% for record in records %}
+        <li>{{ record }}</li>
+    {% endfor %}
+</ul>
+<h1>Garage Records</h1>
+
+<h3>Wheel Services</h3>
+<form method="get" action="{% url 'service_list' %}">
+    <input type="text" name="q" placeholder="Search by plate..." value="{{ request.GET.q }}">
+    
+    <select name="technician">
+        <option value="">All Technicians</option>
+        <option value="Jorame">Jorame</option>
+        <option value="Emmanuel">Emmanuel</option>
+    </select>
+    
+    <button type="submit">Filter</button>
+    <a href="{% url 'service_list' %}">Clear</a>
+</form>
+<table border="1">
+    <tr><th>Date</th><th>Car Plate</th><th>Service Type</th><th>Cost</th></tr>
+    {% for w in wheels %}
+    <tr>
+        <td>{{ w.date }}</td>
+        <td>{{ w.car_plate_number }}</td>
+        <td>{{ w.service_type }}</td>
+        <td>{{ w.cost }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Service Records</h3>
+<table border="1">
+    <tr><th>Date</th><th>Car Plate</th><th>Parts Used</th><th>Total Price</th></tr>
+    {% for s in services %}
+    <tr>
+        <td>{{ s.date }}</td>
+        <td>{{ s.car_number_plate }}</td>
+        <td>{{ s.details_of_parts_used }}</td>
+        <td>{{ s.price }}</td>
+        <td>{{ s.car_plate }}</td>
+        <td>{{ s.technician }}</td>
+        <td><a href="{% url 'service_detail' s.pk %}">View Details</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Part Sales</h3>
+<table border="1">
+    <tr><th>Date</th><th>Customer</th><th>Part Name</th><th>Price</th></tr>
+    {% for p in parts %}
+    <tr>
+        <td>{{ p.date }}</td>
+        <td>{{ p.customer_name }}</td>
+        <td>{{ p.name_of_the_parts }}</td>
+        <td>{{ p.unit_price_for_each_part }}</td>
+    </tr>
+    {% endfor %}
+</table>

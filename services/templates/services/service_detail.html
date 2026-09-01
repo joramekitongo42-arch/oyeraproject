@@ -1,0 +1,9 @@
+{% extends 'services/base.html' %}
+<h1>Service Details for {{ record.car_plate }}</h1>
+
+<p><strong>Technician:</strong> {{ record.technician }}</p>
+<p><strong>Date:</strong> {{ record.date }}</p>
+<p><strong>Cost:</strong> ${{ record.price }}</p>
+<p><strong>Description:</strong> {{ record.description }}</p>
+
+<a href="{% url 'service_list' %}">Back to List</a>

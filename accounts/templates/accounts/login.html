@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} <!-- Optional: If you use django-crispy-forms -->
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card p-4 shadow">
+            <h2 class="text-center mb-4">Login</h2>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- If you are using crispy_forms -->
+                {{ form|crispy }} 
+                
+                <!-- If you are NOT using crispy_forms, use this instead: -->
+                {% comment %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                {% endcomment %}
+
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            </form>
+            
+            <p class="text-center mt-3">
+                Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
