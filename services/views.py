@@ -1,4 +1,3 @@
-from django.db import transaction
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, UpdateView
@@ -6,19 +5,6 @@ from django.views.generic.edit import CreateView
 
 from .forms import PartSaleForm, ServiceRecordForm, WheelServiceForm
 from .models import PartSale, ServiceRecord, WheelService
-
-
-def save_service_and_update_inventory(request):
-    with transaction.atomic():
-        form = ServiceRecordForm(request.POST)
-        if form.is_valid():
-            form.save()
-        else:
-            raise ValueError("Invalid service form")
-
-        part = PartSale.objects.get(name="Oil Filter")
-        part.stock -= 1
-        part.save()
 
 
 def service_detail(request, pk):

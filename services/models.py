@@ -12,6 +12,7 @@ class ServiceRecord(models.Model):
         null=True,
         blank=True,
     )
+    car_plate = models.CharField(max_length=20, default='')
     date = models.DateField()
     price = models.DecimalField(
         max_digits=10,
@@ -31,6 +32,7 @@ class WheelService(models.Model):
         null=True,
         blank=True,
     )
+    car_plate = models.CharField(max_length=20, default='')
     service_type = models.CharField(
         max_length=20,
         choices=[

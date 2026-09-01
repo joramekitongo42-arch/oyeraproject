@@ -1,9 +1,12 @@
 {% extends 'services/base.html' %}
+{% block content %}
 <h1>Service Details for {{ record.car_plate }}</h1>
 
 <p><strong>Technician:</strong> {{ record.technician }}</p>
 <p><strong>Date:</strong> {{ record.date }}</p>
-<p><strong>Cost:</strong> ${{ record.price }}</p>
-<p><strong>Description:</strong> {{ record.description }}</p>
+<p><strong>Price:</strong> {{ record.price }}</p>
+<p><strong>Quantity of Parts:</strong> {{ record.quantity_parts }}</p>
+<p><strong>Parts Details:</strong> {{ record.parts_details }}</p>
 
-<a href="{% url 'service_list' %}">Back to List</a>
+<a href="{% url 'services:service_list' %}">Back to List</a>
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'services/base.html' %}
+{% block content %}
 <h2>Add New Record</h2>
 
 <form method="post">
@@ -7,4 +8,5 @@
     <button type="submit">Save</button>
 </form>
 
-<a href="{% url 'service_list' %}">Cancel</a>
+<a href="{% url 'services:service_list' %}">Cancel</a>
+{% endblock %}
