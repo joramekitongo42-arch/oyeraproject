@@ -2,30 +2,11 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from services.models import ServiceRecord, WheelService
-from .models import Service, WheelJob
 
 User = get_user_model()
-
-# --- Create Views ---
-
-
-class ServiceCreateView(CreateView):
-    model = Service
-    fields = '__all__'
-    template_name = 'dashboard/form.html'
-    success_url = reverse_lazy('dashboard:dashboard_index')
-
-
-class WheelCreateView(CreateView):
-    model = WheelJob
-    fields = '__all__'
-    template_name = 'dashboard/form.html'
-    success_url = reverse_lazy('dashboard:dashboard_index')
 
 # --- Dashboard Views ---
 

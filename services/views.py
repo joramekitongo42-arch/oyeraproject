@@ -53,28 +53,28 @@ def service_create(request):
 class ServiceRecordCreateView(CreateView):
     model = ServiceRecord
     form_class = ServiceRecordForm
-    template_name = 'services/form_template.html'
+    template_name = 'dashboard/form.html'
     success_url = reverse_lazy('services:service_list')
 
 
 class WheelServiceCreateView(CreateView):
     model = WheelService
     form_class = WheelServiceForm
-    template_name = 'services/form_template.html'
+    template_name = 'dashboard/form.html'
     success_url = reverse_lazy('services:service_list')
 
 
 class PartSaleCreateView(CreateView):
     model = PartSale
     form_class = PartSaleForm
-    template_name = 'services/form_template.html'
+    template_name = 'dashboard/form.html'
     success_url = reverse_lazy('services:service_list')
 
 
 class ServiceUpdateView(UpdateView):
     model = ServiceRecord
     fields = '__all__'
-    template_name = 'services/form_template.html'
+    template_name = 'dashboard/form.html'
     success_url = reverse_lazy('services:service_list')
 
 

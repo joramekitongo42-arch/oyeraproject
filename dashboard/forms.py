@@ -1,21 +1,3 @@
-from django import forms
-from .models import Service, WheelJob
-
-
-class ServiceForm(forms.ModelForm):
-    class Meta:
-        model = Service
-        fields = '__all__'
-        widgets = {
-            # Adding Bootstrap 'form-control' class to all inputs
-            'car_plate': forms.TextInput(
-                attrs={'class': 'form-control'}
-            ),
-            'description': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 3}
-            ),
-            'price': forms.NumberInput(
-                attrs={'class': 'form-control'}
-            ),
-            'status': forms.Select(attrs={'class': 'form-select'}),
-        }
+# The dashboard app has no forms of its own. Creating and editing
+# service records, wheel services, and part sales is handled by the
+# services app's forms (see services/forms.py).
