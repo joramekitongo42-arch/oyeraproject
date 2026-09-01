@@ -1,75 +1,140 @@
 {% extends 'services/base.html' %}
 {% block content %}
-<h1>Garage Records</h1>
 
-<div class="actions mb-3">
-    <a href="{% url 'services:service-create' %}">Add New Service</a> |
-    <a href="{% url 'services:wheel-create' %}">Add New Wheel Service</a> |
-    <a href="{% url 'services:part-create' %}">Add New Part Sale</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Garage Records</h2>
+    <div>
+        <a href="{% url 'services:service-create' %}" class="btn btn-primary btn-sm shadow-sm">
+            <i class="bi bi-plus-lg"></i> New Service
+        </a>
+        <a href="{% url 'services:wheel-create' %}" class="btn btn-outline-primary btn-sm shadow-sm">
+            <i class="bi bi-plus-lg"></i> New Wheel Job
+        </a>
+        <a href="{% url 'services:part-create' %}" class="btn btn-outline-primary btn-sm shadow-sm">
+            <i class="bi bi-plus-lg"></i> New Part Sale
+        </a>
+    </div>
 </div>
 
-<hr>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" action="{% url 'services:service_list' %}" class="row g-2 align-items-center">
+            <div class="col-sm-5">
+                <input type="text" name="q" class="form-control" placeholder="Search by plate..." value="{{ request.GET.q }}">
+            </div>
+            <div class="col-sm-4">
+                <select name="technician" class="form-select">
+                    <option value="">All Technicians</option>
+                    <option value="Jorame" {% if request.GET.technician == "Jorame" %}selected{% endif %}>Jorame</option>
+                    <option value="Emmanuel" {% if request.GET.technician == "Emmanuel" %}selected{% endif %}>Emmanuel</option>
+                </select>
+            </div>
+            <div class="col-sm-3 d-flex gap-2">
+                <button type="submit" class="btn btn-dark flex-fill">Filter</button>
+                <a href="{% url 'services:service_list' %}" class="btn btn-outline-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+</div>
 
-<h3>Wheel Services</h3>
-<form method="get" action="{% url 'services:service_list' %}">
-    <input type="text" name="q" placeholder="Search by plate..." value="{{ request.GET.q }}">
+<div class="card mb-4">
+    <div class="card-header bg-white fw-bold">Wheel Services</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Car Plate</th>
+                    <th>Service Type</th>
+                    <th class="text-end">Cost (UGX)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in wheels %}
+                <tr>
+                    <td>{{ w.date }}</td>
+                    <td><span class="plate-badge">{{ w.car_plate }}</span></td>
+                    <td>
+                        {% if w.service_type == 'alignment' %}
+                            <span class="badge text-bg-info">{{ w.get_service_type_display }}</span>
+                        {% elif w.service_type == 'balancing' %}
+                            <span class="badge text-bg-warning">{{ w.get_service_type_display }}</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary">{{ w.get_service_type_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end fw-semibold">{{ w.cost }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No wheel service records yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <select name="technician">
-        <option value="">All Technicians</option>
-        <option value="Jorame">Jorame</option>
-        <option value="Emmanuel">Emmanuel</option>
-    </select>
+<div class="card mb-4">
+    <div class="card-header bg-white fw-bold">Service Records</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Car Plate</th>
+                    <th>Parts Used</th>
+                    <th class="text-end">Price (UGX)</th>
+                    <th>Technician</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in services %}
+                <tr>
+                    <td>{{ s.date }}</td>
+                    <td><span class="plate-badge">{{ s.car_plate }}</span></td>
+                    <td>{{ s.parts_details|truncatechars:40 }}</td>
+                    <td class="text-end fw-semibold">{{ s.price }}</td>
+                    <td>{{ s.technician }}</td>
+                    <td class="text-end">
+                        <a href="{% url 'services:service_detail' s.pk %}" class="btn btn-sm btn-outline-secondary">View</a>
+                        <a href="{% url 'services:service-update' s.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a href="{% url 'services:service-delete' s.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No service records yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <button type="submit">Filter</button>
-    <a href="{% url 'services:service_list' %}">Clear</a>
-</form>
-<table border="1">
-    <tr><th>Date</th><th>Car Plate</th><th>Service Type</th><th>Cost</th></tr>
-    {% for w in wheels %}
-    <tr>
-        <td>{{ w.date }}</td>
-        <td>{{ w.car_plate }}</td>
-        <td>{{ w.get_service_type_display }}</td>
-        <td>{{ w.cost }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">No wheel service records yet.</td></tr>
-    {% endfor %}
-</table>
+<div class="card">
+    <div class="card-header bg-white fw-bold">Part Sales</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Part Name</th>
+                    <th class="text-end">Unit Price (UGX)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in parts %}
+                <tr>
+                    <td>{{ p.date }}</td>
+                    <td>{{ p.customer|default:"Walk-in" }}</td>
+                    <td>{{ p.part_name }}</td>
+                    <td class="text-end fw-semibold">{{ p.unit_price }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No part sales yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<h3>Service Records</h3>
-<table border="1">
-    <tr><th>Date</th><th>Car Plate</th><th>Parts Used</th><th>Price</th><th>Technician</th><th>Actions</th></tr>
-    {% for s in services %}
-    <tr>
-        <td>{{ s.date }}</td>
-        <td>{{ s.car_plate }}</td>
-        <td>{{ s.parts_details }}</td>
-        <td>{{ s.price }}</td>
-        <td>{{ s.technician }}</td>
-        <td>
-            <a href="{% url 'services:service_detail' s.pk %}">View</a>
-            <a href="{% url 'services:service-update' s.pk %}">Edit</a>
-            <a href="{% url 'services:service-delete' s.pk %}">Delete</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6">No service records yet.</td></tr>
-    {% endfor %}
-</table>
-
-<h3>Part Sales</h3>
-<table border="1">
-    <tr><th>Date</th><th>Customer</th><th>Part Name</th><th>Unit Price</th></tr>
-    {% for p in parts %}
-    <tr>
-        <td>{{ p.date }}</td>
-        <td>{{ p.customer|default:"Walk-in" }}</td>
-        <td>{{ p.part_name }}</td>
-        <td>{{ p.unit_price }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">No part sales yet.</td></tr>
-    {% endfor %}
-</table>
 {% endblock %}
